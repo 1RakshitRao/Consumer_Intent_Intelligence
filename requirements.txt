@@ -1,0 +1,11 @@
+pytrends
+pandas
+numpy
+scipy
+statsmodels
+matplotlib
+seaborn
+duckdb
+jupyter
+requests
+openpyxl

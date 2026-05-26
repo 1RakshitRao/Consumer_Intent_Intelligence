@@ -1,0 +1,6 @@
+category,historical_sales_peak_month,search_to_purchase_lag_months,recommended_ramp_month,avg_peak_sales_millions,correlation_at_optimal_lag,pvalue,ci_lower,ci_upper
+furniture,11,12,11,11070.5,0.35,3.888026314968717e-05,0.1905,0.4915
+running_shoes,12,10,2,29076.8,0.3506,3.2735626514546654e-05,0.1925,0.491
+laptops,12,3,9,8581.8,-0.4126,3.704735731216165e-07,-0.541,-0.2653
+apparel,12,2,10,29076.8,0.3442,2.733983562231586e-05,0.1903,0.4816
+washing_machines,12,0,12,8581.8,-0.5286,9.755853987592922e-12,-0.6371,-0.3996
