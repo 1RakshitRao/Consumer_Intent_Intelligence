@@ -6,6 +6,12 @@ This project analyzes whether Google search interest can act as an early signal 
 
 The result is a business-facing analytics workflow that moves from raw data to statistical validation to an actionable recommendation: when a brand should begin increasing ad spend before a category's historical sales peak.
 
+## Platform Preview
+
+![Consumer Intent Intelligence Platform hero and metrics](Web1.png)
+
+![Consumer Intent Intelligence Platform recommendations dashboard](Web2.png)
+
 ## Business Question
 
 Can search behavior help retailers identify when consumer intent starts building before sales happen?
