@@ -531,6 +531,28 @@
       color: #D8DEE9;
     }
 
+    .update-row-strengthened td:first-child {
+      border-left: 4px solid var(--green);
+    }
+
+    .update-row-flipped td:first-child {
+      border-left: 4px solid var(--amber);
+    }
+
+    .update-row-inverse td:first-child {
+      border-left: 4px solid var(--red);
+    }
+
+    .update-row-dissolved td:first-child {
+      border-left: 4px solid var(--muted);
+    }
+
+    .badge-muted {
+      color: #C9D1D9;
+      background: rgba(139, 148, 158, 0.12);
+      border: 1px solid rgba(139, 148, 158, 0.28);
+    }
+
     .stats-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -743,6 +765,7 @@
       <div class="nav-links" aria-label="Dashboard navigation">
         <a href="#question">Question</a>
         <a href="#results">Results</a>
+        <a href="#model-update">2025 Update</a>
         <a href="#outputs">Outputs</a>
         <a href="#recommendations">Recommendations</a>
         <a href="#methodology">Methodology</a>
@@ -865,6 +888,76 @@
               </tbody>
             </table>
           </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="model-update">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <span class="section-kicker">2025 Model Update</span>
+            <h2>Search behavior shifted. The model needed recalibration.</h2>
+          </div>
+          <p class="section-subhead">Extending the dataset through 2025 revealed that two previously reliable lead indicators reversed direction - a finding with direct implications for campaign timing models built on pre-2024 data.</p>
+        </div>
+
+        <div class="table-card reveal">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>2018-2023 Signal</th>
+                  <th>2018-2025 Signal</th>
+                  <th>Direction Change</th>
+                  <th>Behavioral Interpretation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="update-row-strengthened">
+                  <td class="category-cell">Running Shoes</td>
+                  <td>+10 months r=0.35</td>
+                  <td>+12 months r=0.64</td>
+                  <td><span class="badge badge-positive">Strengthened ↑</span></td>
+                  <td>More deliberate purchase decision post-pandemic</td>
+                </tr>
+                <tr class="update-row-flipped">
+                  <td class="category-cell">Apparel</td>
+                  <td>+2 months r=0.34</td>
+                  <td>Inverse r=-0.21</td>
+                  <td><span class="badge badge-negative">Flipped ↓</span></td>
+                  <td>Social commerce and impulse buying disrupted the consideration cycle</td>
+                </tr>
+                <tr class="update-row-flipped">
+                  <td class="category-cell">Furniture</td>
+                  <td>+12 months r=0.35</td>
+                  <td>Inverse r=-0.20</td>
+                  <td><span class="badge badge-negative">Flipped ↓</span></td>
+                  <td>Same-day delivery normalized - algorithmic discovery shortened decision cycle</td>
+                </tr>
+                <tr class="update-row-inverse">
+                  <td class="category-cell">Laptops</td>
+                  <td>Inverse r=-0.41</td>
+                  <td>Inverse r=-0.24</td>
+                  <td><span class="badge badge-inverse">Stable (inverse)</span></td>
+                  <td>Search reflects research behavior, not purchase intent - consistent across both windows</td>
+                </tr>
+                <tr class="update-row-dissolved">
+                  <td class="category-cell">Washing Machines</td>
+                  <td>Inverse r=-0.53</td>
+                  <td>No significant signal</td>
+                  <td><span class="badge badge-muted">Dissolved</span></td>
+                  <td>No stable relationship across the full 7-year window</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="callout callout-blue reveal" style="margin-top: 20px;">
+          <i data-lucide="refresh-cw"></i>
+          <p><strong>Recalibration insight:</strong> A lag model built on 2018-2023 data would have mistimed furniture and apparel campaigns in 2025. This demonstrates why search-intent models require structural revalidation when consumer behavior signals change direction - not just annual data refreshes.</p>
         </div>
       </div>
     </section>

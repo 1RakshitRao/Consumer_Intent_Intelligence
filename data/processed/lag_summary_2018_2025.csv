@@ -1,0 +1,6 @@
+category,optimal_lag,peak_corr,pvalue
+running_shoes,12.0,0.6406,0.0
+apparel,11.0,-0.2147,0.048431
+furniture,0.0,-0.2008,0.049839
+laptops,5.0,-0.2407,0.021561
+washing_machines,,,

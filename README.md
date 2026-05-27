@@ -52,6 +52,24 @@ Running shoes, apparel, and furniture show positive search-leading-sales relatio
 
 Laptops and washing machines show statistically significant but negative relationships. That makes them analytically interesting: the simple search-lag model may not explain these categories well because purchases are often driven by promotions, urgent replacement needs, product cycles, or offline decision factors.
 
+## 2025 Model Update
+
+The dataset was extended through December 2025 to validate whether original findings held across the post-pandemic recovery period.
+
+**Key finding: two categories structurally shifted.**
+
+| Category | Original Signal | Extended Signal | Change |
+|---|---|---|---|
+| Running Shoes | +10 months | +12 months (r=0.64) | Strengthened |
+| Apparel | +2 months | Inverse | Flipped |
+| Furniture | +12 months | Inverse | Flipped |
+| Laptops | Inverse | Inverse | Stable |
+| Washing Machines | Inverse | No signal | Dissolved |
+
+The reversal in furniture and apparel is consistent with structural shifts in consumer discovery behavior post-2023 - social commerce, algorithmic recommendation, and same-day delivery normalization appear to have compressed or eliminated the traditional search-to-purchase consideration window in these categories.
+
+**Implication:** Search-intent lag models require periodic structural revalidation, not just data refresh. A model trained on pre-2024 data would systematically mistime furniture and apparel campaigns in 2025.
+
 ## Media Planning Recommendations
 
 The project translates the lag findings into a concrete ad timing recommendation table in `data/processed/ad_timing_recommendations.csv`.
