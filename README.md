@@ -1,10 +1,21 @@
-# Search Lag Analyzer
+# Consumer Intent Intelligence Platform
+
+[![Live Dashboard](https://img.shields.io/badge/Live%20Dashboard-View%20Now-2F81F7?style=for-the-badge)](https://1RakshitRao.github.io/Consumer_Intent_Intelligence/)
+
+> Quantifying the gap between search intent and retail purchase behavior across five product categories.
+
+---
 
 ## Executive Summary
 
 This project analyzes whether Google search interest can act as an early signal for retail sales demand. I combined weekly Google Trends data with monthly U.S. Census retail sales, removed seasonality, tested search-to-sales lag correlations, and converted the strongest findings into media planning recommendations.
 
 The result is a business-facing analytics workflow that moves from raw data to statistical validation to an actionable recommendation: when a brand should begin increasing ad spend before a category's historical sales peak.
+
+## Interactive Dashboard
+
+The full analysis is available as a live portfolio dashboard:  
+**[View Consumer Intent Intelligence Platform](https://1RakshitRao.github.io/Consumer_Intent_Intelligence/)**
 
 ## Platform Preview
 
