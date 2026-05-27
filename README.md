@@ -31,7 +31,7 @@ If so, marketers can time campaigns earlier, align spend with demand formation, 
 
 ## Data And Method
 
-- Google Trends weekly search interest from 2018 to 2023 for running shoes, furniture, laptops, apparel, and washing machines.
+- Google Trends weekly search interest from January 2018 to December 2023, resampled to month-start frequency (`MS`) for alignment with Census data.
 - U.S. Census Monthly Retail Trade Survey sales data for corresponding retail categories.
 - Weekly search data was resampled to monthly frequency and aligned with monthly sales.
 - Annual seasonality was removed using additive seasonal decomposition.
@@ -56,6 +56,8 @@ Laptops and washing machines show statistically significant but negative relatio
 
 The dataset was extended through December 2025 to validate whether original findings held across the post-pandemic recovery period.
 
+Extended dataset covers January 2018 to December 2025, stored as month-start timestamps throughout.
+
 **Key finding: two categories structurally shifted.**
 
 | Category | Original Signal | Extended Signal | Change |
@@ -69,6 +71,8 @@ The dataset was extended through December 2025 to validate whether original find
 The reversal in furniture and apparel is consistent with structural shifts in consumer discovery behavior post-2023 - social commerce, algorithmic recommendation, and same-day delivery normalization appear to have compressed or eliminated the traditional search-to-purchase consideration window in these categories.
 
 **Implication:** Search-intent lag models require periodic structural revalidation, not just data refresh. A model trained on pre-2024 data would systematically mistime furniture and apparel campaigns in 2025.
+
+**Note on marginal extended results:** Apparel (`p=0.048`, `CI upper=-0.0017`) and Furniture (`p=0.050`, `CI upper=-0.0003`) in the 2018-2025 window pass the `p < 0.05` threshold but sit at the boundary of significance. These results should be interpreted as directional signals rather than robust findings - they are sensitive to sample size and warrant revalidation as additional data becomes available.
 
 ## Media Planning Recommendations
 
