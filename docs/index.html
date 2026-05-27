@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Consumer Intent Intelligence Platform - search-to-sales lag analytics dashboard." />
+  <title>Consumer Intent Intelligence Platform</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --bg: #0D1117;
+      --surface: #161B22;
+      --surface-2: #0F1520;
+      --border: #21262D;
+      --blue: #2F81F7;
+      --blue-soft: rgba(47, 129, 247, 0.14);
+      --green: #3FB950;
+      --green-soft: rgba(63, 185, 80, 0.14);
+      --amber: #D29922;
+      --amber-soft: rgba(210, 153, 34, 0.14);
+      --red: #F85149;
+      --red-soft: rgba(248, 81, 73, 0.14);
+      --text: #E6EDF3;
+      --muted: #8B949E;
+      --shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
+      --radius-lg: 28px;
+      --radius-md: 18px;
+      --radius-sm: 12px;
+      --max-width: 1180px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(47, 129, 247, 0.16), transparent 34rem),
+        radial-gradient(circle at 85% 10%, rgba(63, 185, 80, 0.08), transparent 26rem),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: 0.16;
+      background-image:
+        linear-gradient(rgba(139, 148, 158, 0.08) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(139, 148, 158, 0.08) 1px, transparent 1px);
+      background-size: 52px 52px;
+      mask-image: linear-gradient(to bottom, black, transparent 72%);
+      z-index: -1;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(var(--max-width), calc(100% - 40px));
+      margin: 0 auto;
+    }
+
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      backdrop-filter: blur(20px);
+      background: rgba(13, 17, 23, 0.78);
+      border-bottom: 1px solid rgba(33, 38, 45, 0.82);
+    }
+
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 72px;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-mark {
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      color: var(--blue);
+      border: 1px solid rgba(47, 129, 247, 0.35);
+      border-radius: 12px;
+      background: var(--blue-soft);
+      box-shadow: 0 0 34px rgba(47, 129, 247, 0.18);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      font-weight: 600;
+    }
+
+    .nav-links a {
+      padding: 9px 12px;
+      border-radius: 999px;
+      transition: color 180ms ease, background 180ms ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background: rgba(139, 148, 158, 0.1);
+    }
+
+    .hero {
+      padding: 92px 0 56px;
+      min-height: 680px;
+      display: grid;
+      align-items: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border: 1px solid rgba(47, 129, 247, 0.28);
+      border-radius: 999px;
+      padding: 8px 12px;
+      font-size: 0.82rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .hero h1 {
+      max-width: 920px;
+      margin: 28px 0 20px;
+      font-size: clamp(3rem, 8vw, 7rem);
+      line-height: 0.94;
+      letter-spacing: -0.075em;
+    }
+
+    .hero-subhead {
+      max-width: 780px;
+      margin: 0;
+      color: var(--muted);
+      font-size: clamp(1.08rem, 2vw, 1.45rem);
+    }
+
+    .metric-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 46px;
+    }
+
+    .metric-card,
+    .card,
+    .chart-panel,
+    .stat-card,
+    .method-card {
+      background: linear-gradient(180deg, rgba(22, 27, 34, 0.96), rgba(15, 21, 32, 0.96));
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow);
+    }
+
+    .metric-card {
+      padding: 26px;
+      transition: transform 220ms ease, border-color 220ms ease, box-shadow 220ms ease;
+    }
+
+    .metric-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(47, 129, 247, 0.65);
+      box-shadow: 0 22px 70px rgba(47, 129, 247, 0.12);
+    }
+
+    .metric-value {
+      display: block;
+      color: var(--blue);
+      font-size: clamp(2.2rem, 4vw, 3.4rem);
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+    }
+
+    .metric-label {
+      display: block;
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 0.96rem;
+      font-weight: 600;
+    }
+
+    section {
+      padding: 86px 0;
+      border-top: 1px solid rgba(33, 38, 45, 0.72);
+    }
+
+    .section-header {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .section-kicker {
+      display: block;
+      margin-bottom: 10px;
+      color: var(--blue);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: clamp(2rem, 4vw, 3rem);
+      line-height: 1;
+      letter-spacing: -0.055em;
+    }
+
+    .section-subhead {
+      max-width: 560px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 1.02rem;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      align-items: stretch;
+      margin-top: 28px;
+    }
+
+    .pull-quote {
+      padding: 34px;
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .pull-quote::after {
+      content: "";
+      position: absolute;
+      right: -80px;
+      bottom: -80px;
+      width: 220px;
+      height: 220px;
+      background: radial-gradient(circle, rgba(47, 129, 247, 0.22), transparent 68%);
+    }
+
+    .pull-quote blockquote {
+      margin: 0;
+      font-size: clamp(1.65rem, 3vw, 2.45rem);
+      line-height: 1.12;
+      letter-spacing: -0.045em;
+      font-style: italic;
+      font-weight: 700;
+    }
+
+    .summary-copy {
+      padding: 34px;
+      color: var(--muted);
+      font-size: 1.08rem;
+    }
+
+    .summary-copy strong {
+      color: var(--text);
+    }
+
+    .pipeline {
+      margin-top: 24px;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      align-items: center;
+    }
+
+    .pipeline-step {
+      position: relative;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 12px 14px;
+      color: var(--text);
+      background: var(--blue-soft);
+      border: 1px solid rgba(47, 129, 247, 0.35);
+      border-radius: 999px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .pipeline-step:not(:last-child)::after {
+      content: "->";
+      position: absolute;
+      right: -18px;
+      color: var(--blue);
+      font-weight: 800;
+      z-index: 2;
+    }
+
+    .table-card {
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--surface);
+      box-shadow: var(--shadow);
+    }
+
+    .table-scroll {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 780px;
+    }
+
+    th,
+    td {
+      padding: 18px 20px;
+      border-bottom: 1px solid var(--border);
+      text-align: left;
+      vertical-align: middle;
+    }
+
+    th {
+      color: var(--muted);
+      background: rgba(13, 17, 23, 0.52);
+      font-size: 0.76rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    td {
+      color: var(--text);
+      font-size: 0.95rem;
+    }
+
+    tbody tr {
+      transition: background 180ms ease;
+    }
+
+    tbody tr:hover {
+      background: rgba(47, 129, 247, 0.07);
+    }
+
+    tbody tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .category-cell {
+      font-weight: 800;
+      letter-spacing: -0.01em;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 76px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .badge-positive {
+      color: var(--green);
+      background: var(--green-soft);
+      border: 1px solid rgba(63, 185, 80, 0.35);
+    }
+
+    .badge-negative {
+      color: var(--amber);
+      background: var(--amber-soft);
+      border: 1px solid rgba(210, 153, 34, 0.38);
+    }
+
+    .badge-inverse {
+      color: var(--red);
+      background: var(--red-soft);
+      border: 1px solid rgba(248, 81, 73, 0.38);
+    }
+
+    .mono {
+      font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+      font-size: 0.9rem;
+      color: #C9D1D9;
+    }
+
+    .chart-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 22px;
+      align-items: stretch;
+    }
+
+    .chart-panel {
+      padding: 22px;
+    }
+
+    .chart-panel h3,
+    .stat-card h3,
+    .method-card h3 {
+      margin: 0;
+      color: var(--text);
+      font-size: 1.08rem;
+      letter-spacing: -0.02em;
+    }
+
+    .chart-frame {
+      margin: 18px 0 14px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: #FFFFFF;
+    }
+
+    .chart-frame img {
+      width: 100%;
+      height: auto;
+    }
+
+    .caption {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .recommendation-shell {
+      display: grid;
+      gap: 20px;
+    }
+
+    .lag-dot {
+      width: 10px;
+      height: 10px;
+      display: inline-block;
+      margin-right: 10px;
+      border-radius: 50%;
+      vertical-align: middle;
+    }
+
+    .dot-short {
+      background: var(--green);
+      box-shadow: 0 0 18px rgba(63, 185, 80, 0.5);
+    }
+
+    .dot-medium {
+      background: var(--amber);
+      box-shadow: 0 0 18px rgba(210, 153, 34, 0.5);
+    }
+
+    .dot-long {
+      background: var(--red);
+      box-shadow: 0 0 18px rgba(248, 81, 73, 0.46);
+    }
+
+    .callout {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      padding: 18px 20px;
+      color: #F0D99A;
+      background: var(--amber-soft);
+      border: 1px solid rgba(210, 153, 34, 0.38);
+      border-radius: var(--radius-md);
+    }
+
+    .callout p {
+      margin: 0;
+    }
+
+    .callout-blue {
+      color: #D6E7FF;
+      background: var(--blue-soft);
+      border-color: rgba(47, 129, 247, 0.42);
+    }
+
+    .callout-blue strong {
+      color: var(--text);
+    }
+
+    .strategic-column {
+      width: 42%;
+      min-width: 360px;
+      color: #D8DEE9;
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .stat-card {
+      padding: 26px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 4px;
+      background: var(--blue);
+    }
+
+    .stat-card.warning::before {
+      background: var(--amber);
+    }
+
+    .stat-value {
+      display: block;
+      margin: 16px 0 10px;
+      color: var(--blue);
+      font-size: 2.4rem;
+      line-height: 1;
+      font-weight: 800;
+      letter-spacing: -0.055em;
+    }
+
+    .stat-card.warning .stat-value {
+      color: var(--amber);
+    }
+
+    .stat-card p,
+    .method-card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.96rem;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .method-card {
+      padding: 24px;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+    }
+
+    .method-icon {
+      width: 46px;
+      height: 46px;
+      display: grid;
+      place-items: center;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border: 1px solid rgba(47, 129, 247, 0.32);
+      border-radius: 14px;
+    }
+
+    .method-card p {
+      margin-top: 8px;
+    }
+
+    footer {
+      padding: 40px 0 48px;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .footer-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 22px;
+    }
+
+    .footer-name {
+      color: var(--text);
+      font-weight: 800;
+      font-size: 1.05rem;
+    }
+
+    .footer-note {
+      margin: 4px 0 0;
+      font-size: 0.9rem;
+    }
+
+    .social-links {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .social-links a {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--border);
+      border-radius: 50%;
+      background: var(--surface);
+      color: var(--muted);
+      transition: color 180ms ease, border-color 180ms ease, transform 180ms ease;
+    }
+
+    .social-links a:hover {
+      color: var(--blue);
+      border-color: rgba(47, 129, 247, 0.55);
+      transform: translateY(-2px);
+    }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(24px);
+      transition: opacity 700ms ease, transform 700ms ease;
+    }
+
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 980px) {
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        min-height: auto;
+        padding-top: 72px;
+      }
+
+      .metric-grid,
+      .summary-grid,
+      .chart-grid,
+      .stats-grid,
+      .method-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .pipeline {
+        grid-template-columns: 1fr;
+      }
+
+      .pipeline-step:not(:last-child)::after {
+        content: "down";
+        right: auto;
+        bottom: -20px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 0.72rem;
+      }
+
+      .section-header {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .container {
+        width: min(100% - 28px, var(--max-width));
+      }
+
+      .hero h1 {
+        font-size: clamp(2.7rem, 17vw, 4.2rem);
+      }
+
+      section {
+        padding: 64px 0;
+      }
+
+      .metric-card,
+      .pull-quote,
+      .summary-copy,
+      .chart-panel,
+      .stat-card,
+      .method-card {
+        padding: 20px;
+      }
+
+      .method-card {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-inner {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a class="brand" href="#top" aria-label="Consumer Intent Intelligence Platform home">
+        <span class="brand-mark"><i data-lucide="activity"></i></span>
+        <span>Consumer Intent Intelligence</span>
+      </a>
+      <div class="nav-links" aria-label="Dashboard navigation">
+        <a href="#question">Question</a>
+        <a href="#results">Results</a>
+        <a href="#outputs">Outputs</a>
+        <a href="#recommendations">Recommendations</a>
+        <a href="#methodology">Methodology</a>
+      </div>
+    </div>
+  </nav>
+
+  <main id="top">
+    <header class="hero">
+      <div class="container">
+        <span class="eyebrow"><i data-lucide="radar"></i> Retail demand intelligence</span>
+        <h1>Consumer Intent Intelligence Platform</h1>
+        <p class="hero-subhead">Quantifying the gap between search intent and retail purchase behavior across five product categories</p>
+
+        <div class="metric-grid reveal">
+          <article class="metric-card">
+            <span class="metric-value">5</span>
+            <span class="metric-label">Categories Analyzed</span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-value">0-12 Months</span>
+            <span class="metric-label">Conversion Windows</span>
+          </article>
+          <article class="metric-card">
+            <span class="metric-value">p &lt; 0.05</span>
+            <span class="metric-label">All Results Statistically Validated</span>
+          </article>
+        </div>
+      </div>
+    </header>
+
+    <section id="question">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <span class="section-kicker">Executive Summary</span>
+            <h2>The Business Question</h2>
+          </div>
+          <p class="section-subhead">A search-to-sales lag model turns noisy consumer intent signals into practical campaign timing intelligence.</p>
+        </div>
+
+        <div class="summary-grid reveal">
+          <article class="card pull-quote">
+            <blockquote>Can search behavior help retailers identify when consumer intent starts building - before sales happen?</blockquote>
+            <span class="eyebrow"><i data-lucide="search-check"></i> Intent before revenue</span>
+          </article>
+          <article class="card summary-copy">
+            <p><strong>Implication:</strong> if search demand forms months before purchase behavior shows up in retail sales, marketers can shift spend earlier and meet consumers while they are still researching. This dashboard identifies which categories show lead indicators, which categories do not, and how those lags translate into media planning windows.</p>
+          </article>
+        </div>
+
+        <div class="card pipeline reveal" aria-label="Methodology pipeline">
+          <div class="pipeline-step"><i data-lucide="database"></i> Data Collection</div>
+          <div class="pipeline-step"><i data-lucide="waves"></i> Seasonality Removal</div>
+          <div class="pipeline-step"><i data-lucide="line-chart"></i> Lag Correlation</div>
+          <div class="pipeline-step"><i data-lucide="badge-check"></i> Statistical Validation</div>
+          <div class="pipeline-step"><i data-lucide="megaphone"></i> Media Recommendations</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="results">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <span class="section-kicker">Validated Findings</span>
+            <h2>Search-to-Purchase Lag by Category</h2>
+          </div>
+          <p class="section-subhead">Each reported result passes a statistical significance screen and is interpreted as a timing relationship, not a causal claim.</p>
+        </div>
+
+        <div class="table-card reveal">
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Optimal Lag</th>
+                  <th>Correlation</th>
+                  <th>p-value</th>
+                  <th>Interpretation</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="category-cell">Furniture</td>
+                  <td>12 months</td>
+                  <td><span class="badge badge-positive">0.350</span></td>
+                  <td class="mono">0.000039</td>
+                  <td>Search leads sales by a full planning cycle</td>
+                </tr>
+                <tr>
+                  <td class="category-cell">Running Shoes</td>
+                  <td>10 months</td>
+                  <td><span class="badge badge-positive">0.351</span></td>
+                  <td class="mono">0.000033</td>
+                  <td>Intent builds well before seasonal peaks</td>
+                </tr>
+                <tr>
+                  <td class="category-cell">Apparel</td>
+                  <td>2 months</td>
+                  <td><span class="badge badge-positive">0.344</span></td>
+                  <td class="mono">0.000027</td>
+                  <td>Short cycle, useful for seasonal timing</td>
+                </tr>
+                <tr>
+                  <td class="category-cell">Laptops</td>
+                  <td>3 months</td>
+                  <td><span class="badge badge-negative">-0.413</span></td>
+                  <td class="mono">0.00000037</td>
+                  <td>Broad search does not predict sales timing cleanly</td>
+                </tr>
+                <tr>
+                  <td class="category-cell">Washing Machines</td>
+                  <td>0 months</td>
+                  <td><span class="badge badge-negative">-0.529</span></td>
+                  <td class="mono">0.0000000000098</td>
+                  <td>Likely reactive or replacement-driven behavior</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="outputs">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <span class="section-kicker">Analysis Outputs</span>
+            <h2>Analysis Outputs</h2>
+          </div>
+          <p class="section-subhead">The dashboard keeps the visual evidence close to the business interpretation so the recommendation is easy to audit.</p>
+        </div>
+
+        <div class="chart-grid">
+          <article class="chart-panel reveal">
+            <h3>Search-to-Sales Lag Correlation Heatmap</h3>
+            <div class="chart-frame">
+              <img src="lag_heatmap.png" alt="Search-to-sales lag correlation heatmap by category" />
+            </div>
+            <p class="caption">Each cell shows the Pearson correlation at that lag. The highest positive value per row is the optimal search-to-purchase window for that category.</p>
+          </article>
+
+          <article class="chart-panel reveal">
+            <h3>Year-over-Year Lag Stability (2018-2023)</h3>
+            <div class="chart-frame">
+              <img src="yearly_lag_stability.png" alt="Year-over-year lag stability heatmap from 2018 through 2023" />
+            </div>
+            <p class="caption">2020 shows a consistent spike across high-involvement categories - furniture, laptops, and washing machines all shifted to a 6-month lag during the pandemic before compressing post-recovery.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="recommendations">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <span class="section-kicker">Decision Layer</span>
+            <h2>Ad Spend Timing Recommendations</h2>
+          </div>
+          <p class="section-subhead"><em>Translating lag findings into campaign planning decisions</em></p>
+        </div>
+
+        <div class="recommendation-shell reveal">
+          <div class="callout callout-blue">
+            <i data-lucide="timer-reset"></i>
+            <p><strong>Cost of mistiming:</strong> A brand that waits for peak sales season to ramp spend on furniture has already missed 12 months of consideration-phase intent. For running shoes, late entry means competing at peak CPMs for an audience that may have already made its decision.</p>
+          </div>
+
+          <div class="table-card">
+            <div class="table-scroll">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Category</th>
+                    <th>Recommended Ramp Start</th>
+                    <th>Timing Risk Window</th>
+                    <th>Signal Strength</th>
+                    <th class="strategic-column">Strategic Implication</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="category-cell"><span class="lag-dot dot-long"></span>Furniture</td>
+                    <td>November (prior year)</td>
+                    <td>Miss November start = entire cycle lost</td>
+                    <td><span class="badge badge-positive">Strong</span></td>
+                    <td class="strategic-column">Begin brand awareness spend 12 months before peak - performance spend alone will miss the consideration window entirely.</td>
+                  </tr>
+                  <tr>
+                    <td class="category-cell"><span class="lag-dot dot-long"></span>Running Shoes</td>
+                    <td>February</td>
+                    <td>10-month window - 2 months of buffer</td>
+                    <td><span class="badge badge-positive">Strong</span></td>
+                    <td class="strategic-column">Front-load upper-funnel spend in Q1 to capture intent that converts in Q4.</td>
+                  </tr>
+                  <tr>
+                    <td class="category-cell"><span class="lag-dot dot-short"></span>Apparel</td>
+                    <td>October</td>
+                    <td>2-month window - no buffer</td>
+                    <td><span class="badge badge-positive">Strong</span></td>
+                    <td class="strategic-column">2-month window allows seasonal campaign alignment - standard planning cadence works here.</td>
+                  </tr>
+                  <tr>
+                    <td class="category-cell"><span class="lag-dot dot-medium"></span>Laptops</td>
+                    <td>September</td>
+                    <td>Negative signal - timing model unreliable</td>
+                    <td><span class="badge badge-inverse">Inverse</span></td>
+                    <td class="strategic-column">Search volume is not a reliable timing signal - align spend with product release cycles and promotions instead.</td>
+                  </tr>
+                  <tr>
+                    <td class="category-cell"><span class="lag-dot dot-short"></span>Washing Machines</td>
+                    <td>December</td>
+                    <td>Reactive category - always-on strategy recommended</td>
+                    <td><span class="badge badge-inverse">Inverse</span></td>
+                    <td class="strategic-column">Purchase is replacement-driven - always-on presence more effective than seasonal campaigns.</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="callout">
+            <i data-lucide="triangle-alert"></i>
+            <p><strong>Analytical caveat:</strong> These results are correlational, not causal. They show timing relationships between search behavior and sales but do not prove that search interest causes purchases.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="validation">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <span class="section-kicker">Statistical Rigor</span>
+            <h2>Statistical Validation</h2>
+          </div>
+          <p class="section-subhead">The model reports statistically defensible relationships and explicitly flags where the evidence is directional only.</p>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card reveal">
+            <h3>Significance Threshold</h3>
+            <span class="stat-value">p &lt; 0.05</span>
+            <p>Every cited lag result passes significance filtering</p>
+          </article>
+          <article class="stat-card reveal">
+            <h3>Confidence Intervals</h3>
+            <span class="stat-value">95% CI</span>
+            <p>All results exclude zero in their confidence interval</p>
+          </article>
+          <article class="stat-card warning reveal">
+            <h3>Tier Hypothesis Test</h3>
+            <span class="stat-value">p = 0.867</span>
+            <p>Low vs high-consideration tier difference was not statistically significant - reported as directional only</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="methodology">
+      <div class="container">
+        <div class="section-header reveal">
+          <div>
+            <span class="section-kicker">Build Notes</span>
+            <h2>How It Was Built</h2>
+          </div>
+          <p class="section-subhead">The workflow is designed to be reproducible, statistically transparent, and directly connected to business decisions.</p>
+        </div>
+
+        <div class="method-grid">
+          <article class="method-card reveal">
+            <div class="method-icon"><i data-lucide="cloud-download"></i></div>
+            <div>
+              <h3>Data Sources</h3>
+              <p>Google Trends weekly search interest (2018-2023) and U.S. Census Monthly Retail Trade Survey. Both are free, public, and documented.</p>
+            </div>
+          </article>
+          <article class="method-card reveal">
+            <div class="method-icon"><i data-lucide="calendar-sync"></i></div>
+            <div>
+              <h3>Resampling</h3>
+              <p>Weekly search data resampled to monthly frequency to align with Census sales cadence. Alignment done on shared date index.</p>
+            </div>
+          </article>
+          <article class="method-card reveal">
+            <div class="method-icon"><i data-lucide="sparkles"></i></div>
+            <div>
+              <h3>Seasonality Removal</h3>
+              <p>Additive seasonal decomposition applied to both series before correlation. Removes annual patterns so correlation reflects true search-sales timing, not shared seasonality.</p>
+            </div>
+          </article>
+          <article class="method-card reveal">
+            <div class="method-icon"><i data-lucide="move-horizontal"></i></div>
+            <div>
+              <h3>Lag Correlation</h3>
+              <p>Pearson correlation tested at each lag from 0 to 12 months. Sales series shifted backward to test whether search at time t predicts sales at time t+lag.</p>
+            </div>
+          </article>
+          <article class="method-card reveal">
+            <div class="method-icon"><i data-lucide="shield-check"></i></div>
+            <div>
+              <h3>Statistical Filtering</h3>
+              <p>Only lags with p &lt; 0.05 and 95% confidence intervals excluding zero are reported. Insignificant results treated as no detectable relationship.</p>
+            </div>
+          </article>
+          <article class="method-card reveal">
+            <div class="method-icon"><i data-lucide="warehouse"></i></div>
+            <div>
+              <h3>Star Schema Warehouse</h3>
+              <p>Results stored in a DuckDB star schema with fct_retail_sales, fct_search_interest, dim_category, and dim_date tables. KPI views built on top for recommendation output.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-inner">
+      <div>
+        <div class="footer-name">Rakshit Rao</div>
+        <p class="footer-note">Built with Python · DuckDB · Google Trends API · U.S. Census Bureau data</p>
+      </div>
+      <div class="social-links" aria-label="Profile links">
+        <a href="https://github.com/1RakshitRao/Consumer_Intent_Intelligence" target="_blank" rel="noreferrer" aria-label="GitHub repository">
+          <i data-lucide="github"></i>
+        </a>
+        <a href="https://www.linkedin.com/in/rakshit-rao/" target="_blank" rel="noreferrer" aria-label="LinkedIn profile">
+          <i data-lucide="linkedin"></i>
+        </a>
+        <a href="https://github.com/1RakshitRao" target="_blank" rel="noreferrer" aria-label="Portfolio">
+          <i data-lucide="globe"></i>
+        </a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    lucide.createIcons();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".reveal").forEach((element) => observer.observe(element));
+  </script>
+</body>
+</html>
